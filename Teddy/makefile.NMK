@@ -1,0 +1,39 @@
+# Specify compiler
+
+CC= cl.exe
+
+  
+
+# Specify linker
+
+LINK = link.exe 
+
+  
+
+.PHONY : all
+
+all : app
+
+  
+
+# Link the object files into a binary
+
+app : Struct_Test.o config.h constants.h
+
+    $(LINK) /OUT:app.exe Struct_Test.o Struct_Test.o
+
+  
+
+# Compile the source files into object files
+
+Struct_Test.o : Struct_Test.c
+
+    $(CC) /c Struct_Test.c -o /FoStruct_Test.o
+
+  
+
+# Clean target
+
+clean :
+
+    del Struct_Test.o app 
