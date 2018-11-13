@@ -5,7 +5,7 @@ Hello Everyone,
 You can find some useful GPU programming resources below:
 
 Very useful websites:
-
+ - https://www.ibm.com/developerworks/community/blogs/jfp/entry/How_To_Compute_Mandelbrodt_Set_Quickly?lang=en
  - https://developer.nvidia.com/how-to-teach-cuda
  - https://developer.nvidia.com/how-to-cuda-python
    
