@@ -1,9 +1,9 @@
 import numpy as np
 import cProfile
-from numba import jit, vectorize, guvectorize, float64, complex64, int32, float32
+from numba import jit, vectorize, guvectorize, float64, complex64, int32, float32, njit
+from timeit import default_timer as timer
 
-
-@jit(int32(complex64, int32))
+@njit(int32(complex64, int32))
 def mandelbrot(c, maxiter):
     nreal = 0
     real = 0
@@ -31,5 +31,9 @@ def mandelbrot_set(xmin, xmax, ymin, ymax, width, height, maxiter):
     n3 = mandelbrot_numpy(c, maxiter)
     return (r1, r2, n3.T)
 
-cProfile.run('mandelbrot_set(-2.0, 0.5, -1.25, 1.25, 1000, 1000, 80)')
-cProfile.run('mandelbrot_set(-0.74877,-0.74872,0.06505,0.06510,1000,1000,2048)')
+start = timer()
+mandelbrot_set(-2.0, 0.5, -1.25, 1.25, 1000, 1000, 80)
+print(timer() - start)
+start = timer()
+mandelbrot_set(-0.74877,-0.74872,0.06505,0.06510,1000,1000,2048)
+print(timer() - start)
