@@ -3,6 +3,7 @@ from timeit import default_timer as timer
 from numba import vectorize, jit, autojit, njit, float32
 from memory_profiler import profile
 import tensorflow as tf
+import resource
 
 
 ## change CPU to CUDA or GPU
@@ -15,7 +16,8 @@ def pow(a, b):
 def pow1(a, b):
   return a ** b
 
-@profile
+
+# @profile
 def numba(vecSize):
   a = b = np.array(np.random.rand(vecSize, vecSize), dtype=np.float64)
 
@@ -29,19 +31,27 @@ def numba(vecSize):
   duration = timer() - start
   print(duration)
 
-@profile
+
+# @profile
 def tensor(vecSize):
   a = b = np.array(np.random.rand(vecSize * vecSize), dtype=np.float64)
-
   a = tf.convert_to_tensor(a, dtype=tf.float64)
-  b= tf.convert_to_tensor(b,dtype=tf.float64)
-  print(a.shape)
+  b = tf.convert_to_tensor(b, dtype=tf.float64)
+  start = timer()
+  c = tf.multiply(a, b)
+  print(timer() - start)
+
+  a = b = np.array(np.random.rand(vecSize, vecSize), dtype=np.float64)
+  a = tf.convert_to_tensor(a, dtype=tf.float64)
+  b = tf.convert_to_tensor(b, dtype=tf.float64)
   start = timer()
   c = tf.multiply(a, b)
   print(timer() - start)
 
 
 def main():
+  print(resource.getrlimit(resource.RLIMIT_DATA))
+  #resource.setrlimit(resource.RLIMIT_DATA, (16000000000,16000000000))
   vecSize = 10000
   numba(vecSize)
   tensor(vecSize)
