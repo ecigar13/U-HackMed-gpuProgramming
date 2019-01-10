@@ -46,6 +46,8 @@ def initiateParticles3d(numberOfParticle, bound):
 ##set the bounds
 ##move them ---> will use a lot
 ##associate them ---> if they do so.
+##dissociationProb = dissociationRate * timeStep;
+##rng(randNumGenSeeds(1),'twister')
 ##move the pairs
 ##disassociate the pairs.
 

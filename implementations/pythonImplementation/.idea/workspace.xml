@@ -1,69 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="020621a3-d4b3-4571-ab35-e59e2af3f19f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../KeithCode/assignPosition.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../KeithCode/moleculeSimulation/bin/Debug/moleculeSimulation" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../KeithCode/moleculeSimulation/main.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../KeithCode/moleculeSimulation/moleculeSimulation.cbp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../KeithCode/moleculeSimulation/moleculeSimulation.depend" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../KeithCode/moleculeSimulation/moleculeSimulation.layout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../KeithCode/moleculeSimulation/move.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../KeithCode/moleculeSimulation/obj/Debug/main.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../KeithCode/simulateParallel.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Teddy/Struct_Test.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Teddy/config.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Teddy/constants.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Teddy/head.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Teddy/makefile.NMK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Teddy/makefile.m1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../cppImplementation/.Rhistory" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../cppImplementation/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../cppImplementation/cppImplementation.cbp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../cppImplementation/cppImplementation.layout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../cppImplementation/exercise.cu" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../cppImplementation/main.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../cppImplementation/main.cu" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/ModelSimulationStrategyForPaniz.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/README.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/allRN_30.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/calcCollisionProb_circlesIntArea.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/calcTimeOfCollision.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/convReceptClust2CompTracks.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/driver.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/echo.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/fixClusterLabels.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/genReceptorInfoLabeled.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/insertNodes.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/makeNodesFromC2R.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/maxWeightedMatching.mexa64" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/progressText.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/receptorAggregationAlg_maxWeightedMatching_potColl.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/receptorAggregationAlg_maxWeightedMatching_sureColl.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/receptorAggregationSimple_new.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/removeClusterAggregation.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/runReceptorAggregationSimple_HPC_PAR_20170519.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/run_sim.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/sec2struct.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/singleReceptorClustering.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../hackathonTeam2/molecular_simulation/updateR2C2RwithNodeInfo.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../matlabImplementation/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/.idea/libraries/R_User_Library.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/.idea/pythonImplementation.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/mandelbrotFast.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/mandelbrotSlow.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/molSimulation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/pow.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/printEnv.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../pythonImplementation/scratch_1.py" beforeDir="false" />
-    </list>
+    <list default="true" id="020621a3-d4b3-4571-ab35-e59e2af3f19f" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -334,7 +272,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1853" height="1055" extended-state="7" />
+    <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27725512" />
@@ -342,7 +280,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4991708" visible="true" weight="0.32829374" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4991708" weight="0.32829374" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
