@@ -36,7 +36,6 @@ def initiateParticles2d(numberOfParticle, bound):
   return np.random.randint(bound, size=(numberOfParticle, 2), dtype=np.int64)
 
 
-# @jit(parallel=True)
 def initiateParticles3d(numberOfParticle, bound):
   """Return a 2d array of x, y, z within a certain bound. The index stands for the id of particle."""
   return np.random.randint(bound, size=(numberOfParticle, 3), dtype=np.int64)
