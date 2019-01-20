@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="020621a3-d4b3-4571-ab35-e59e2af3f19f" name="Default Changelist" comment="" />
+    <list default="true" id="020621a3-d4b3-4571-ab35-e59e2af3f19f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/receptorAggregationSimple_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/receptorAggregationSimple_new.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -10,29 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/molSimulation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="5" selection-start-line="5" selection-end-line="5" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scratch_1.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/cKDTree.py">
+        <entry file="file://$PROJECT_DIR$/receptorAggregationSimple_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="9" column="59" selection-start-line="9" selection-start-column="59" selection-end-line="9" selection-end-column="59" />
+            <state relative-caret-position="608">
+              <caret line="85" column="19" lean-forward="true" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -41,10 +27,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pow.py">
+        <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="954">
-              <caret line="53" column="70" lean-forward="true" selection-start-line="53" selection-start-column="3" selection-end-line="53" selection-end-column="70" />
+            <state relative-caret-position="1026">
+              <caret line="63" column="52" selection-start-line="62" selection-start-column="2" selection-end-line="63" selection-end-column="52" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -69,6 +55,8 @@
       <find>@jit</find>
       <find>_orig</find>
       <find>point_tree</find>
+      <find>runind</find>
+      <find>simt</find>
     </findStrings>
     <replaceStrings>
       <replace>float64</replace>
@@ -88,6 +76,8 @@
         <option value="$PROJECT_DIR$/molSimulation.py" />
         <option value="$PROJECT_DIR$/scratch_1.py" />
         <option value="$PROJECT_DIR$/cKDTree.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/receptorAggregationSimple_new.py" />
       </list>
     </option>
   </component>
@@ -135,7 +125,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.cKDTree">
+  <component name="RunManager" selected="Python.receptorAggregationSimple_new">
     <configuration name="cKDTree" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="pythonImplementation" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -157,7 +147,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="mandelbrotFast" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="pythonImplementation" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -169,7 +159,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/mandelbrotFast.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -199,7 +189,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="pow" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="receptorAggregationSimple_new" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="pythonImplementation" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -211,7 +201,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pow.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/receptorAggregationSimple_new.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -242,19 +232,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.pow" />
-      <item itemvalue="Python.mandelbrotFast" />
       <item itemvalue="Python.molSimulation" />
       <item itemvalue="Python.scratch_1" />
       <item itemvalue="Python.cKDTree" />
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.receptorAggregationSimple_new" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.receptorAggregationSimple_new" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.cKDTree" />
         <item itemvalue="Python.scratch_1" />
         <item itemvalue="Python.molSimulation" />
-        <item itemvalue="Python.pow" />
-        <item itemvalue="Python.mandelbrotFast" />
       </list>
     </recent_temporary>
   </component>
@@ -275,7 +265,7 @@
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27725512" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28389597" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -309,54 +299,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mandelbrotSlow.py">
+    <entry file="file://$PROJECT_DIR$/mandelbrotSlow.py" />
+    <entry file="file://$PROJECT_DIR$/mandelbrotFast.py" />
+    <entry file="file://$PROJECT_DIR$/molSimulation.py" />
+    <entry file="file://$PROJECT_DIR$/cKDTree.py" />
+    <entry file="file://$PROJECT_DIR$/pow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="11" column="47" selection-start-line="11" selection-start-column="47" selection-end-line="11" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mandelbrotFast.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="19" column="82" selection-start-line="19" selection-start-column="74" selection-end-line="19" selection-end-column="82" />
+        <state relative-caret-position="619">
+          <caret line="53" column="70" selection-start-line="53" selection-start-column="3" selection-end-line="53" selection-end-column="70" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/molSimulation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" selection-start-line="5" selection-end-line="5" selection-end-column="41" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scratch_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        <state relative-caret-position="241">
+          <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pow.py">
+    <entry file="file://$PROJECT_DIR$/receptorAggregationSimple_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="954">
-          <caret line="53" column="70" lean-forward="true" selection-start-line="53" selection-start-column="3" selection-end-line="53" selection-end-column="70" />
+        <state relative-caret-position="608">
+          <caret line="85" column="19" lean-forward="true" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cKDTree.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="59" selection-start-line="9" selection-start-column="59" selection-end-line="9" selection-end-column="59" />
+        <state relative-caret-position="1026">
+          <caret line="63" column="52" selection-start-line="62" selection-start-column="2" selection-end-line="63" selection-end-column="52" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
