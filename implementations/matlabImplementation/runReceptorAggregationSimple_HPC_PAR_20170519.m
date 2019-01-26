@@ -44,7 +44,7 @@ fprintf('\naggregationProb = [%g;%g;%g;%g;%g;%g]   |   timeStep = %g',modelParam
 fprintf('\naggregationDist = %g                    |   simTime = %g',modelParam.aggregationDist,simParam.simTime);
 fprintf('\ndissociationRate = %g                      |   initTime = %g         ',modelParam.dissociationRate,simParam.initTime);
 fprintf('\nlabelRatio = [%g;%g;%g;%g;%g;%g;%g]  |   randNumGenSeed = %d   ',modelParam.labelRatio,simParam.randNumGenSeeds);
-fprintf('\nintensityQuantum = [%g %g]                |                         ',modelParam.intensityQuantum);
+fprintf('\nintensityQuantum = [%g %g]                |    ',modelParam.intensityQuantum);
 fprintf('\n=========================================================================\n');
 
 tic
