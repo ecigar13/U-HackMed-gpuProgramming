@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="020621a3-d4b3-4571-ab35-e59e2af3f19f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/receptorAggregationSimple_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/receptorAggregationSimple_new.py" afterDir="false" />
-    </list>
+    <list default="true" id="020621a3-d4b3-4571-ab35-e59e2af3f19f" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +13,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/receptorAggregationSimple_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="608">
-              <caret line="85" column="19" lean-forward="true" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
+            <state relative-caret-position="513">
+              <caret line="57" column="21" lean-forward="true" selection-start-line="46" selection-end-line="57" selection-end-column="21" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -95,7 +91,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -107,6 +102,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -232,11 +228,11 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.molSimulation" />
-      <item itemvalue="Python.scratch_1" />
       <item itemvalue="Python.cKDTree" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.molSimulation" />
       <item itemvalue="Python.receptorAggregationSimple_new" />
+      <item itemvalue="Python.scratch_1" />
     </list>
     <recent_temporary>
       <list>
@@ -265,7 +261,7 @@
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28389597" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2872164" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -322,8 +318,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/receptorAggregationSimple_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="608">
-          <caret line="85" column="19" lean-forward="true" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
+        <state relative-caret-position="513">
+          <caret line="57" column="21" lean-forward="true" selection-start-line="46" selection-end-line="57" selection-end-column="21" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

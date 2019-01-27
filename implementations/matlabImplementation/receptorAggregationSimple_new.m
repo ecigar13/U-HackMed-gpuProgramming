@@ -98,9 +98,6 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   %% Output
   errFlag = 0;
   receptorInfoAll = [];
-  %09/05/14 (ryirdaw)
-  %need to block the following otherwise conversion from struct to double
-  %error at at the end
   timeIterArray = [];
 
   % Initiate the counts for the possible associations
@@ -148,7 +145,7 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
 
   %% receptor initial positions and clustering
   obsRegionSize = prod(observeSideLen); %calculate observation region size
-
+  disp(obsRegionSize)
   if isempty(initPositions)
       numReceptors = round(obsRegionSize * receptorDensity);  %calculate number of receptors
       initPositions = rand(numReceptors,probDim) .* repmat(observeSideLen,numReceptors,1); %initialize receptor positions
@@ -167,7 +164,6 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   [numClusters,maxClustSize] = size(cluster2receptor);
 
   %% Main simulation body reserve memory for output vectors
-  receptorTraj = zeros(numReceptors,probDim,numIterations);
   recept2clustAssign = zeros(numReceptors,numIterations);
   clust2receptAssign = zeros(numReceptors,maxClustSize,numIterations);
 
@@ -176,22 +172,25 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   recept2clustAssign(:,1) = receptor2cluster;
   clust2receptAssign(1:numClusters,1:maxClustSize,1) = cluster2receptor;
 
-  %Diagnostic quantities (ryirdaw)
-  assocStats = struct('numSureAssoc',NaN(numIterations,1),...
-      'numPotColl',NaN(numIterations,1),'numColl',NaN(numIterations,1),...
-      'numPotColl_Assoc',NaN(numIterations,1),...
-      'sureAssocCountBySize',NaN(numReceptors,numIterations),...
-      'numCollProbPairs',NaN(numIterations,1));
-
-  collProbStatStruct = struct('collisionProb',NaN,'pwDist',NaN,...
-      'primaryNodeRadius',NaN,'partnerNodeRadii',NaN);
-  collProbStats(numIterations,1) = collProbStatStruct;
   progressText(0,'Simulation');
+
+  %{
+    ##initiate a bunch of particles
+    ##set the bounds
+    ##move them ---> will use a lot
+    ##associate them ---> if they do so.
+    ##dissociationProb = dissociationRate * timeStep;
+    ##rng(randNumGenSeeds(1),'twister')
+    ##move the pairs
+    ##disassociate the pairs.
+  %}
 
   %iterate in time
   for iIter = 2 : numIterations
       fprintf('\niIter = %d\n',iIter);
       
+      receptorOld = 
+
       %% Dissociation
       %allow receptors in clusters to dissociate in current time point
       [cluster2receptor,receptor2clusterDissAlg,clusterSize] = receptorDissociationAlg(...
@@ -199,15 +198,7 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
       
       aggregationProbVec = ones(numReceptors,1);
       
-      
-      %09/05/13 (ryirdaw)
-      %The call to receptorDissociationAlg above could have dissociated
-      %receptors from existing clusters.  These free receptors should not be
-      %allowed to associate in receptorAggregationAlg below. Set the
-      %aggregation probability for these receptors to zero.
-      %Note: receptor2cluster vector from receptorDissociationAlg is being
-      %recieved now (above, receptor2clusterDissAlg).
-      
+      %Move
       if (max(receptor2clusterDissAlg) > max(receptor2cluster))
           %A dissociation has occured. To confirm and identify the 
           %receptors invovled, determine the cluster size of each receptor
@@ -262,7 +253,7 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
 
       end
       
-      %calculate the new receptor positions at the current time point
+      %Move the receptors.
       positionsNew = positionsOld + receptorDisp;
       
       %make sure that receptors stay inside the region of interest
