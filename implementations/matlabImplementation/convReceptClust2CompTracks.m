@@ -13,16 +13,10 @@ function compTracks = convReceptClust2CompTracks(clust2recept,recept2clust,...
 %       receptorIntensity: (Number of receptors) - by - (number of
 %                          time points) array of receptor intensities.
 %                          Optional. Default: All 1.
-%
 %OUTPUT compTracks  : Compound tracks, in the format of tracksFinal as
 %                     output by trackCloseGapsKalman.
-
 %Khuloud Jaqaman, January 2009
-%
 %Modified 08/20/14, Robel Yirdaw
-%
-
-%% Input
 
 %get maximum number of clusters, maximum cluster size and number of frames
 [numClustMax,sizeClustMax,numFrames] = size(clust2recept);
@@ -52,14 +46,12 @@ lookAtCluster = ones(numClustFrame1,1);
 for iClust = 1 : numClustFrame1
     
     if lookAtCluster(iClust) == 1
-
         %find receptors in current cluster in first frame
         receptClustWholeMovieNew = clust2receptFrame1(iClust,:);
         receptClustWholeMovieNew = receptClustWholeMovieNew(receptClustWholeMovieNew~=0)';
         listGrew = 1;
 
         while listGrew
-
             %copy list of receptors
             receptClustWholeMovie = receptClustWholeMovieNew;
 
@@ -74,7 +66,6 @@ for iClust = 1 : numClustFrame1
 
             %add these receptors to list of receptors
             receptClustWholeMovieNew = unique([receptClustWholeMovie; receptorsAdditional]);
-
             %check whether new list of receptors is longer than old list
             listGrew = length(receptClustWholeMovieNew) > length(receptClustWholeMovie);
 
@@ -289,7 +280,6 @@ for iClust = 1 : numClustGlobal
                     [mergeRow splitRow+1:mergeRow-1],:);
                 mergeRow = splitRow + 1;
             end
-            
             
             %switch segment numbers in sequence of events at times of
             %splitting and merging

@@ -49,8 +49,6 @@ function interReceptDist = removeClusterAggregation(interReceptDist,receptor2clu
 %
 %   Robel Yirdaw, 07/05/13
 %       Modified 09/12/13
-%
-%
 
     %Number of receptors
     numReceptors = length(receptor2clusterPrev);

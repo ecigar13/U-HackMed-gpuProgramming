@@ -96,27 +96,19 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   % Modified 2017/11/30 Luciana de Oliveira
 
   %% Output
-
   errFlag = 0;
   receptorInfoAll = [];
   %09/05/14 (ryirdaw)
   %need to block the following otherwise conversion from struct to double
   %error at at the end
-  %receptorInfoLabeled = struct;
   timeIterArray = [];
-  %assocStats = [];
-  %collProbStats = [];
 
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % Modification LRO 2017/11/30
   % Initiate the counts for the possible associations
   totalPossibleAssociation=0;
   totalPossAssFirst=0;
   totalPossAssSecond=0;
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   %% Verify input and assign default value. 
-
   [errFlag,diffCoef,receptorDensity,aggregationProb, aggregationDist, dissociationRate,labelRatio,initPositions,... 
   intensityQuantum,probDim,observeSideLen,timeStep,simTime,initTime,randNumGenSeeds] = verifyInput(modelParam,simParam,...
    errFlag);
@@ -141,130 +133,29 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   %coefficient
   stepStd = sqrt( 2 * diffCoef * timeStep );
 
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %05/27/14 (ryirdaw)
-  %We are now introducing a collision probability modeled by a linear
-  %function with slope and interecept values calculated below. The
-  %probability is 1 at the user defined association distance
-  %(associationDist) and decreases linearly to reach 0 at the corrected
-  %association distance (associationDistCorr).
-  %Also, the corrected aggregationDist is now saved as aggregationDistCorr, 
-  %since both need to be passed to the association function which is also
-  %modified to accomodate these chagnes
-
   %adjust aggregationDist to account for the finite simulation time step and
   %the expected receptor displacement in that time step
-  %NOTE: 1/2 corrected to 2x (10/2013)
   aggregationDistCorr = max(aggregationDist,sqrt(probDim)*stepStd*2);
 
-  %05/27/14 (ryirdaw) - use a struct for the associationDist values
   associationDistVals = struct('associationDist',aggregationDist,...
       'associationDistCorr',aggregationDistCorr);
-  %{
-  %05/27/14 (ryirdaw) - calculate slope and intercept values of the collision probability
-  %model and place in a struct.
-  %Slope
-
-  %m = 1 / (aggregationDist - aggregationDistCorr);
-  m = 0;
-  %Intercept
-  %b = -1*m*aggregationDistCorr;
-  b = 1;
-  %Place values in a struct
-  collisionProbVals = struct('m',m,'b',b);
-  %}
-
-  %06/04/14 (ryirdaw)
-  %Implemented collision probability via the arc approach. To use this, set
-  %collisionProbVals to [], so that the linear model approach will be
-  %disabled. The above assignment should be blocked as well.
-  %collisionProbVals = [];
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %06/24/14 (ryirdaw)
-  %Determine the number of displacements for closest distance/collision
-  %calculations of nodes
-  %{
-  %Calculate unit time of displacment from diffusion coefficient and
-  %aggregationDist via the rmsd formula. The actual value is rounded down to
-  %the nearest 1E-X, where X is the OM of the value determined at aggregDist.
-  %dispUnitTime = 1e-6;
-  dispUnitTime = 10^(floor(log10( (1/diffCoef)*(aggregationDist/4)^2 ) ) );
-  %Number of displacements
-  numDispPerUnitTime = timeStep/dispUnitTime;
-  %Time vector for each displacement
-  dispTimeVec = 0:dispUnitTime:timeStep;
-  %}
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   %calculate dissociation probability
   dissociationProb = dissociationRate * timeStep;
 
   %initialize random number generators
-  % rand('twister',randNumGenSeeds(1));
-  % randn('state',randNumGenSeeds(2));
   rng(randNumGenSeeds(1),'twister')
 
   %% receptor initial positions and clustering
-
-  %calculate observation region size
-  obsRegionSize = prod(observeSideLen);
+  obsRegionSize = prod(observeSideLen); %calculate observation region size
 
   if isempty(initPositions)
-      %calculate number of receptors
-      numReceptors = round(obsRegionSize * receptorDensity);
-      %initialize receptor positions
-      initPositions = rand(numReceptors,probDim) .* repmat(observeSideLen,numReceptors,1);
+      numReceptors = round(obsRegionSize * receptorDensity);  %calculate number of receptors
+      initPositions = rand(numReceptors,probDim) .* repmat(observeSideLen,numReceptors,1); %initialize receptor positions
   else
       %get number of receptors
       numReceptors = size(initPositions,1);
   end
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %03/25/14 (ryirdaw)
-  %aggregationProb is now a vector giving prob of formation per size - first
-  %element is NaN. This changes the initial cluster formation as implemented
-  %in the original code (below).
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %{
-  02/21/14 (ryirdaw)
-  Disabled the following call to generate clusters at the start of the
-  simulation - starting with all monomers instead. The 4 return vars are
-  needed for the subsequent lines so need to set here all except
-  initPositions. 
-  Additional Note:
-  One easy check for this would be to set aggregatinProbVec to
-  0 and let it continue as before. This will also start the sim. with all
-  free receptors but note that after return from receptorAggregationAlg the
-  cluster IDs will be scrambled and receptorDisp in the for-loop below will
-  produce a different set of displacement values than obtained if taking the
-  new approach (setting the three variables manually below). This is because
-  the sequence of rand values is different for the two since the call to
-  receptorAggregationAlg will result in rand calls.
-
-
-  %Use the following to start with random clusters when aggregationProb = 0.
-  aggregationProbVec = ones(numReceptors,1);
-
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %Original. Modified 03/25/14 - aggregationProb can now be a vector in which
-  %case we set all receptor's aggregationProbVec with 1.
-
-  %based on these positions, cluster receptors (and modify their positions)
-  if (length(aggregationProb) == 1)
-      aggregationProbVec = aggregationProb*ones(numReceptors,1);
-  else
-      aggregationProbVec = ones(numReceptors,1);
-  end
-
-  [cluster2receptor,receptor2cluster,clusterSize,initPositions] = ...
-      receptorAggregationAlg(initPositions,aggregationDist,aggregationProbVec,[]);
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %}
 
   %Starting with all receptors as monomers.  Set cluster2receptor and
   %receptor2cluster as 1D vector of 1:numReceptors.  Then clusterSize will be
@@ -275,9 +166,7 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
 
   [numClusters,maxClustSize] = size(cluster2receptor);
 
-  %% Main simulation body
-
-  %reserve memory for output vectors
+  %% Main simulation body reserve memory for output vectors
   receptorTraj = zeros(numReceptors,probDim,numIterations);
   recept2clustAssign = zeros(numReceptors,numIterations);
   clust2receptAssign = zeros(numReceptors,maxClustSize,numIterations);
@@ -287,7 +176,6 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   recept2clustAssign(:,1) = receptor2cluster;
   clust2receptAssign(1:numClusters,1:maxClustSize,1) = cluster2receptor;
 
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %Diagnostic quantities (ryirdaw)
   assocStats = struct('numSureAssoc',NaN(numIterations,1),...
       'numPotColl',NaN(numIterations,1),'numColl',NaN(numIterations,1),...
@@ -298,60 +186,20 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   collProbStatStruct = struct('collisionProb',NaN,'pwDist',NaN,...
       'primaryNodeRadius',NaN,'partnerNodeRadii',NaN);
   collProbStats(numIterations,1) = collProbStatStruct;
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
   progressText(0,'Simulation');
 
   %iterate in time
   for iIter = 2 : numIterations
-      %fprintf('\niIter = %d\n',iIter);
+      fprintf('\niIter = %d\n',iIter);
       
       %% Dissociation
-      
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      %06/24/13 (ryirdaw)
-      %the dissociation probability is normalized to the number of receptors
-      %in a given cluster - each receptor has an effective dissociation
-      %probability.  Pass this to receptorDissociationAlg (below). 
-
-      %numReceptorsPerCluster = sum( (cluster2receptor(receptor2cluster,:) ~= 0),2);
-      %denom = factorial(numReceptorsPerCluster)./(factorial(numReceptorsPerCluster - 1));
-      %effDissociationProb = dissociationProb./numReceptorsPerCluster;
-
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      
-      %if (any(numReceptorsPerCluster > 1))
       %allow receptors in clusters to dissociate in current time point
       [cluster2receptor,receptor2clusterDissAlg,clusterSize] = receptorDissociationAlg(...
           cluster2receptor,receptor2cluster,clusterSize,dissociationProb);
-      %end
       
-      %% Association flags based on outcome of dissociation
-    
-      %for receptors that were clustered from before, make their aggregation
-      %probability equal to 1, since they should stay clustered at this
-      %point in the simulation
-      %aggregationProbVec = aggregationProb*ones(numReceptors,1);
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      %03/25/14 (ryirdaw)
-      %This no longer depends on aggregationProb since aggregationProb is a
-      %vector. Just set to 1 here and will be modified below for those
-      %receptors that just underwent dissociaiton. The final vector is passed
-      %to the associaition function.
       aggregationProbVec = ones(numReceptors,1);
       
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      %01/28/14 (ryirdaw)
-      %Disable when using receptorAggregationAlg_maxWeightedMatching as there
-      %is no need - clusters will not dissociate in the above function unlike
-      %the original (must enable if using the original aggreg. function below)
-      %{
-      clusteredReceptorIndx = cluster2receptor(clustersBig,:);
-      clusteredReceptorIndx = clusteredReceptorIndx(clusteredReceptorIndx~=0);
-      aggregationProbVec(clusteredReceptorIndx) = 1;
-      %}
       
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %09/05/13 (ryirdaw)
       %The call to receptorDissociationAlg above could have dissociated
       %receptors from existing clusters.  These free receptors should not be
@@ -381,10 +229,6 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
           %For those receptors who have dissociated set the
           %aggregationProbVec to 0.  NOTE: if the other receptors remain
           %clustered, their aggregationProbVec must stay as 1.        
-          %{
-          aggregationProbVec( (sizeNewPrev(:,1) - sizeNewPrev(:,2) < 0) & ...
-              (sizeNewPrev(:,1) == 1) ) = 0;
-          %}
           aggregationProbVec( (sizeNewPrev(:,1) - sizeNewPrev(:,2) < 0) ) = 0;
           
           %Reassign receptor2cluster to the new set reflecting the
@@ -393,9 +237,7 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
           receptor2cluster = receptor2clusterDissAlg;
       end
       
-      %% New receptor/cluster positions
-      
-      %get indices of clusters with more than one receptor
+      %% New receptor/cluster positions get indices of clusters with more than one receptor
       clustersBig = find(clusterSize>1);
 
       %get receptor positions at previous time point
@@ -403,8 +245,6 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
       
       %generate receptor displacements
       receptorDisp = stepStd*randn(numReceptors,probDim);
-      %     receptorDisp = randn(numReceptors,probDim) .* ...
-      %         repmat(stepStd*(1.5-(abs(positionsOld(:,2)-0.1))/0.1),1,probDim);
 
       %assign receptors in a cluster the displacement of the receptor with
       %the smallest index
@@ -416,8 +256,7 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
           %find the receptor with the smallest index
           indxSmall = min(clusterMembers);
 
-          %assign all receptors in this cluster the displacement of that
-          %receptor
+          %assign all receptors in this cluster the displacement of that receptor
           receptorDisp(clusterMembers,:) = repmat(receptorDisp(indxSmall,:),...
               clusterSize(iCluster),1);
 
@@ -433,49 +272,7 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
       positionsNew = positionsNew - 2 * correctionBoundaryUp;
 
       %% Association
-      
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      %07/03/14 (ryirdaw)
-      %Perform association of nodes whose pairwise distance < aggregationDist
-      %
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
-      %{
-      %01/28/14 (ryirdaw)
-      %If using this, must enable lines above that set clusters flags to 1
-      
-      %based on these positions, cluster receptors (and modify their positions)
-      [cluster2receptor,receptor2cluster,clusterSize,positionsNew] = ...
-          receptorAggregationAlg(positionsNew,aggregationDist,aggregationProbVec,receptor2cluster);    
-      %}
-      
-      %{
-      03/25/14 (ryirdaw)
-      The association function has been modified to allow for variable 
-      association probabilities, per cluster size.  This is the user defined
-      quantity aggregationProb while aggregationProbVec identifies which
-      receptors can undergo association, as updated above. Now passing both
-      aggregationProb and aggregationProbVec. Use aggregationProbVec to
-      prevent specific receptors from undergoing association. Note that
-      giving an aggregatinProb value of 0.0 for a given cluster size will
-      prevent that cluster and all larger clusters from being formed since
-      aggregation happens one receptor at a time.
-      %}
-      
       try     
-        %{
-          %For associations via linear or arc collision probabilities, enable
-          %the following. Must also enable and set associationDistVals above.
-          %To not use either type of collision probability, call the original
-          %function receptorAggregationAlg_maxWeightedMatching_noCollProb.
-          %Alternatively, one can use the function below but set slope to 1
-          %and intercept to 0 in the linear model.
-          
-          [cluster2receptor,receptor2cluster,clusterSize,positionsNew] = ...
-              receptorAggregationAlg_maxWeightedMatching_CollProb(positionsNew,...
-              associationDistVals,aggregationProbVec,aggregationProb,...
-              collisionProbVals,receptor2cluster,cluster2receptor,clusterSize);
-          %}
-          
           numClustPre = length(cluster2receptor(:,1));
           
           [cluster2receptor,receptor2cluster,clusterSize,positionsNew,aggregationProbVec,sureAssocCount,numberPossibleAssociations] = ...
@@ -483,20 +280,14 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
               aggregationDist,aggregationProbVec,aggregationProb,receptor2cluster,...
               cluster2receptor,clusterSize);        
           
-          
-          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
           % Modification LRO 2017/11/30 to calculate the number of
           % possible associations now I add a new output for the function
           totalPossAssFirst=totalPossAssFirst+numberPossibleAssociations;
-          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-          
-          
           numClustPost = length(cluster2receptor(:,1));
           assocStats.numSureAssoc(iIter,1) = numClustPre - numClustPost;
           
           %assocStats.numSureAssoc(iIter,2) = nansum(sureAssocCount);
           assocStats.sureAssocCountBySize(1:length(sureAssocCount),iIter) = sureAssocCount;
-          
           clear numClustPre numClustPost sureAssocCount
       
       catch newAssocFunExcep        
@@ -506,45 +297,18 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
           return;
       end
 
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      %07/03/14 (ryirdaw)
-      %Perform association of nodes not handled above and whose pairwise 
-      %distance >= aggregationDist but < aggregationDistCorr    
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
-      %{
-      %The following version of _potColl uses distance values calculated at
-      %each displacement time points. The one below uses the approach where a
-      %minimum for pairwise distances within the particles step is searched by
-      %looking at the x and y components of the steps against time.
-      %Calculation of individual dispalcement values was found to be time
-      %consuming - the latter approach much faster.
-      
-      [aggregationProbVec,receptor2cluster,cluster2receptor,clusterSize,...
-          positionsNew] = receptorAggregationAlg_maxWeightedMatching_potColl_070114(...
-          cluster2receptor,receptor2cluster,positionsOld,positionsNew,...
-          aggregationProbVec,aggregationProb,associationDistVals,...
-          numDispPerUnitTime,dispTimeVec,clusterSize);     
-      %}
-      
       [~,receptor2cluster,cluster2receptor,clusterSize,...
           positionsNew,numPotColl,numColl,numPotColl_Assoc,numCollProbPairs,...
           collProbStatsTemp,possibleAssociations] =...
           receptorAggregationAlg_maxWeightedMatching_potColl(...
           cluster2receptor,receptor2cluster,positionsOld,positionsNew,...
           aggregationProbVec,aggregationProb,associationDistVals,clusterSize);
-      
-      
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % Modification LRO 2017/11/30 to calculate the number of
-  % possible associations now I add a new output for the function
-  totalPossAssSecond=totalPossAssSecond+possibleAssociations;
-  % 
-  %calculate the total number of possible associations
-  totalPossibleAssociation=totalPossAssFirst+totalPossAssSecond;
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
-      
-      
-      
+
+      % Modification LRO 2017/11/30 to calculate the number of
+      % possible associations now I add a new output for the function
+      totalPossAssSecond=totalPossAssSecond+possibleAssociations;
+      %calculate the total number of possible associations
+      totalPossibleAssociation=totalPossAssFirst+totalPossAssSecond;
       
       assocStats.numPotColl(iIter) = numPotColl;
       assocStats.numColl(iIter) = numColl;
@@ -552,8 +316,6 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
       assocStats.numCollProbPairs(iIter) = numCollProbPairs;
 
       collProbStats(iIter) = collProbStatsTemp;
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
-      
       [numClusters,maxClustSize] = size(cluster2receptor);
       
       %store new receptor information
@@ -566,7 +328,6 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   end %(for iIter = 2 : numIterations)
 
   %% Post-processing
-
   %remove the initialization period from simulation
   receptorTraj = receptorTraj(:,:,numIterInit+1:end);
   recept2clustAssign = recept2clustAssign(:,numIterInit+1:end);
@@ -579,130 +340,16 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   rowSum = sum(cluster2receptor,2);
   clust2receptAssign = clust2receptAssign(rowSum~=0,:,:);
 
-  % %put receptor trajectories and clusters into the format of the output of
-  % %trackCloseGapsKalman
-  % compTracks = convReceptClust2CompTracks(clust2receptAssign,...
-  %     recept2clustAssign,receptorTraj);
-
   %put information in receptorInfoAll
   receptorInfoAll = struct('receptorTraj',receptorTraj,'recept2clustAssign',...
       recept2clustAssign,'clust2receptAssign',clust2receptAssign,'simParam',simParam,'modelParam',modelParam);
 
   %% Receptor labeling and sub-sampling
-
   %KJ (150528): call function to label and sub-sample
   receptorInfoLabeled = genReceptorInfoLabeled(receptorInfoAll,...
       labelRatio,intensityQuantum);
-
 end
-
 
 %% ~~~ the end ~~~
 
 
-
-%% subfunction 2 - still used
-
-function [cluster2receptor,receptor2cluster,clusterSize] = receptorDissociationAlg(...
-    cluster2receptor,receptor2cluster,clusterSize,dissociationProb)
-
-  %get number of receptors and number of clusters
-  numReceptors = length(receptor2cluster);
-  numClusters = length(clusterSize);
-  maxClusterSize = max(clusterSize);
-
-  %copy some input variables for modification and output
-  cluster2receptorTmp = [cluster2receptor; zeros(numReceptors-numClusters,maxClusterSize)];
-  receptor2clusterTmp = receptor2cluster;
-  clusterSizeTmp = [clusterSize; zeros(numReceptors-numClusters,1)];
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %determine whether each receptor would dissociate if given the chance
-  %receptorDissociateFlag = rand(numReceptors,1) < dissociationProb;
-
-  %find clusters with more than one receptor
-  clustersBig = find(clusterSize > 1);
-
-  %06/27/13 (1 of 2)
-  %{
-  dissociationProb used on clusters instead of receptors (above).
-  Probability can be determined in two ways:  a single value for all current
-  clusters or each cluster has its own value. For a dissociating cluster, a
-  receptor will be randomly picked and removed from the cluster (below).
-  Dissociation happens one receptor at a time. 
-  %}
-  %Each cluster has its own value
-  clusterDissociateFlag = rand(numClusters,1) < dissociationProb;
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-  %go over these clusters
-  numClustersInit = numClusters; %this is for storing receptors that dissociate
-  for iCluster = clustersBig'
-
-      %get receptors belonging to this cluster
-      clusterMembers = cluster2receptor(iCluster,1:clusterSize(iCluster));
-
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      %get their dissociation flags
-      %dissociateFlag = receptorDissociateFlag(clusterMembers);
-      
-      %06/27/13 (2 of 2)
-      %For a cluster that is dissociating, determine which receptor to
-      %dissociate by randomly picking one of the receptors.
-      dissociateFlag = zeros(numel(clusterMembers),1);
-      if (clusterDissociateFlag(iCluster))
-          %Current cluster is dissociating. Pick a random integer between 1
-          %and number of receptors in cluster.
-          recept2Dissociate = randi(numel(clusterMembers),1);
-          %Set the flag for picked receptor to 1.
-          dissociateFlag(recept2Dissociate) = 1;
-      end
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      %07/17/13
-      %dissociateFlag = dissociateCluster(dissociationProb,clusterMembers);
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      
-      
-      %if all receptors want to dissociate, assign the first one a flag
-      %of 0 (just for algorithmic reasons)
-      if all(dissociateFlag == 1)
-          dissociateFlag(1) = 0;
-      end
-
-      %remove receptors that want to dissocate from cluster
-      receptorsReject = clusterMembers(dissociateFlag==1);
-      clusterMembers = setdiff(clusterMembers,receptorsReject);
-      numMembers = length(clusterMembers);
-
-      %append to the end of the cluster vector those receptors that
-      %dissociated
-      numClustersFinal = numClustersInit + length(receptorsReject);
-      cluster2receptorTmp(numClustersInit+1:numClustersFinal,1) = receptorsReject;
-      clusterSizeTmp(numClustersInit+1:numClustersFinal) = 1;
-
-      %keep the receptors that did not dissociate in their proper cluster
-      cluster2receptorTmp(iCluster,:) = 0;
-      cluster2receptorTmp(iCluster,1:numMembers) = clusterMembers';
-      clusterSizeTmp(iCluster) = numMembers;
-
-      %update vector storing for every receptor its cluster number
-      receptor2clusterTmp(receptorsReject) = (numClustersInit+1:numClustersFinal)';
-      numClustersInit = numClustersFinal;
-
-  end
-
-  %remove empty row and columns and get final number of clusters
-  columnSum = sum(cluster2receptorTmp);
-  cluster2receptorTmp = cluster2receptorTmp(:,columnSum~=0);
-  rowSum = sum(cluster2receptorTmp,2);
-  cluster2receptorTmp = cluster2receptorTmp(rowSum~=0,:);
-  clusterSizeTmp = clusterSizeTmp(rowSum~=0);
-
-  %copy temporary variable into output variables
-  cluster2receptor = cluster2receptorTmp;
-  receptor2cluster = receptor2clusterTmp;
-  clusterSize = clusterSizeTmp;
-
-end
