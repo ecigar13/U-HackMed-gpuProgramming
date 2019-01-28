@@ -154,24 +154,6 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
       numReceptors = size(initPositions,1);
   end
 
-  %Starting with all receptors as monomers.  Set cluster2receptor and
-  %receptor2cluster as 1D vector of 1:numReceptors.  Then clusterSize will be
-  %numReceptors long with all values of 1. Note all are column vectors.
-  receptor2cluster = (1:numReceptors)';
-  cluster2receptor = (1:numReceptors)';
-  clusterSize = ones(numReceptors,1);
-
-  [numClusters,maxClustSize] = size(cluster2receptor);
-
-  %% Main simulation body reserve memory for output vectors
-  recept2clustAssign = zeros(numReceptors,numIterations);
-  clust2receptAssign = zeros(numReceptors,maxClustSize,numIterations);
-
-  %store initial information
-  receptorTraj(:,:,1) = initPositions;
-  recept2clustAssign(:,1) = receptor2cluster;
-  clust2receptAssign(1:numClusters,1:maxClustSize,1) = cluster2receptor;
-
   progressText(0,'Simulation');
 
   %{
@@ -188,8 +170,26 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   %iterate in time
   for iIter = 2 : numIterations
       fprintf('\niIter = %d\n',iIter);
+      %%%%%%%%%%%%%%%%%%%%%%%
+      receptorOld = ones(numReceptors,5);
+      receptorNew = ones(numReceptors,5);
+      receptorNew(:,5) = 0;
+      receptorOld(:,5)=0;
+
+      %Move the receptors. Save the old position, then assign the new position. randn is multithreaded.
+      receptorDisp = stepStd*randn(1,numReceptors,probDim);
+      receptorOld(:,2) = receptorNew(:,2);
+      receptorNew(:,2) = receptorNew(:,2)+receptorDisp;
+      receptorOld(:,3) = receptorNew(:,3);
+      receptorNew(:,3) = receptorNew(:,3)+receptorDisp;
       
-      receptorOld = 
+      %make sure that receptors stay inside the region of interest
+      correctionBoundaryLow = min(positionsNew,0);
+      positionsNew = positionsNew - 2 * correctionBoundaryLow;
+      correctionBoundaryUp = max(positionsNew - repmat(observeSideLen,numReceptors,1),0);
+      positionsNew = positionsNew - 2 * correctionBoundaryUp;
+
+      %%%%%%%%%%%%%%%%%%%%%%%%%
 
       %% Dissociation
       %allow receptors in clusters to dissociate in current time point
@@ -235,7 +235,7 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
       positionsOld = receptorTraj(:,:,iIter-1);
       
       %generate receptor displacements
-      receptorDisp = stepStd*randn(numReceptors,probDim);
+      
 
       %assign receptors in a cluster the displacement of the receptor with
       %the smallest index
@@ -253,15 +253,7 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
 
       end
       
-      %Move the receptors.
-      positionsNew = positionsOld + receptorDisp;
       
-      %make sure that receptors stay inside the region of interest
-      correctionBoundaryLow = min(positionsNew,0);
-      positionsNew = positionsNew - 2 * correctionBoundaryLow;
-      correctionBoundaryUp = max(positionsNew - repmat(observeSideLen,numReceptors,1),0);
-      positionsNew = positionsNew - 2 * correctionBoundaryUp;
-
       %% Association
       try     
           numClustPre = length(cluster2receptor(:,1));
