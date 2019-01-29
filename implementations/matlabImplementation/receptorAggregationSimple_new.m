@@ -177,19 +177,23 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
       receptorOld(:,5)=0;
 
       %Move the receptors. Save the old position, then assign the new position. randn is multithreaded.
-      receptorDisp = stepStd*randn(1,numReceptors,probDim);
-      receptorOld(:,2) = receptorNew(:,2);
-      receptorNew(:,2) = receptorNew(:,2)+receptorDisp;
-      receptorOld(:,3) = receptorNew(:,3);
-      receptorNew(:,3) = receptorNew(:,3)+receptorDisp;
+      receptorDisp = stepStd*randn(3,numReceptors,probDim);
+      receptorOld(:,[2,5]) = receptorNew(:,[2,5]);
+      receptorNew(:,[2,4]) = receptorNew(:,[2,4])+receptorDisp;
+ 
       
-      %make sure that receptors stay inside the region of interest
-      correctionBoundaryLow = min(positionsNew,0);
-      positionsNew = positionsNew - 2 * correctionBoundaryLow;
+
+      %make sure that receptors stay inside the region of interest (not below 0 and not above limit)
+      correctionBoundaryLow = max(receptorOld(:,[2,4]),0);
+      receptorNew(:,[2,4])=receptorNew(:,[2,4]) - 2 * correctionBoundaryLow;
+      correctionBoundaryHigh = max(receptorOld(:,2),repmat(observeSideLen,numReceptors,1));
+
+
+      %%%working on this
+
       correctionBoundaryUp = max(positionsNew - repmat(observeSideLen,numReceptors,1),0);
       positionsNew = positionsNew - 2 * correctionBoundaryUp;
 
-      %%%%%%%%%%%%%%%%%%%%%%%%%
 
       %% Dissociation
       %allow receptors in clusters to dissociate in current time point
