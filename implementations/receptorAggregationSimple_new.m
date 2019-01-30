@@ -166,35 +166,21 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
     ##move the pairs
     ##disassociate the pairs.
   %}
+  
+  receptorOld = ones(numReceptors,4);
+  receptorNew = ones(numReceptors,4);
+  %set cluster id to 0
+  receptorNew(:,1) = 0;
+  receptorOld(:,1)=0;
+
 
   %iterate in time
   for iIter = 2 : numIterations
       fprintf('\niIter = %d\n',iIter);
-      %%%%%%%%%%%%%%%%%%%%%%%
-      receptorOld = ones(numReceptors,5);
-      receptorNew = ones(numReceptors,5);
-      receptorNew(:,5) = 0;
-      receptorOld(:,5)=0;
-
-      %Move the receptors. Save the old position, then assign the new position. randn is multithreaded.
-      receptorDisp = stepStd*randn(3,numReceptors,probDim);
-      receptorOld(:,[2,5]) = receptorNew(:,[2,5]);
-      receptorNew(:,[2,4]) = receptorNew(:,[2,4])+receptorDisp;
- 
+      %%%%%%%%%%%%%%%%%%%%%%% Moving the receptors
+      [molArrayNew,molArrayOld,clusterMolsMap] = move(molArrayNew, molArrayOld,clusterMolsMapOld,...
+          clusterMolsMapNew,stepStd,dissociationProb)
       
-
-      %make sure that receptors stay inside the region of interest (not below 0 and not above limit)
-      correctionBoundaryLow = max(receptorOld(:,[2,4]),0);
-      receptorNew(:,[2,4])=receptorNew(:,[2,4]) - 2 * correctionBoundaryLow;
-      correctionBoundaryHigh = max(receptorOld(:,2),repmat(observeSideLen,numReceptors,1));
-
-
-      %%%working on this
-
-      correctionBoundaryUp = max(positionsNew - repmat(observeSideLen,numReceptors,1),0);
-      positionsNew = positionsNew - 2 * correctionBoundaryUp;
-
-
       %% Dissociation
       %allow receptors in clusters to dissociate in current time point
       [cluster2receptor,receptor2clusterDissAlg,clusterSize] = receptorDissociationAlg(...
@@ -202,62 +188,7 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
       
       aggregationProbVec = ones(numReceptors,1);
       
-      %Move
-      if (max(receptor2clusterDissAlg) > max(receptor2cluster))
-          %A dissociation has occured. To confirm and identify the 
-          %receptors invovled, determine the cluster size of each receptor
-          %now and compare with size values from previous iterations. The
-          %best way to do this is to tally the number of other receptors each
-          %receptor is associated with.
-          %Store the new and previous sizes on two columns for each receptor.        
-
-          sizeNewPrev = NaN(length(receptor2clusterDissAlg),2);
-          for recepID=1:length(receptor2clusterDissAlg)
-              %Get cluster label for current receptor in this and previous
-              %iteration
-              clustIDNew = receptor2clusterDissAlg(recepID);
-              clustIDPrev = receptor2cluster(recepID);
-              %Get the total number of receptors associated
-              sizeNewPrev(recepID,1:2) = [sum(receptor2clusterDissAlg == clustIDNew)...
-                  sum(receptor2cluster == clustIDPrev)];
-          end
-          %For those receptors who have dissociated set the
-          %aggregationProbVec to 0.  NOTE: if the other receptors remain
-          %clustered, their aggregationProbVec must stay as 1.        
-          aggregationProbVec( (sizeNewPrev(:,1) - sizeNewPrev(:,2) < 0) ) = 0;
-          
-          %Reassign receptor2cluster to the new set reflecting the
-          %dissociation.  NOTE: the position vector also shows the
-          %dissociation that has occured.
-          receptor2cluster = receptor2clusterDissAlg;
-      end
-      
-      %% New receptor/cluster positions get indices of clusters with more than one receptor
-      clustersBig = find(clusterSize>1);
-
-      %get receptor positions at previous time point
-      positionsOld = receptorTraj(:,:,iIter-1);
-      
-      %generate receptor displacements
-      
-
-      %assign receptors in a cluster the displacement of the receptor with
-      %the smallest index
-      for iCluster = clustersBig'
-
-          %get receptors belonging to this cluster
-          clusterMembers = cluster2receptor(iCluster,1:clusterSize(iCluster));
-
-          %find the receptor with the smallest index
-          indxSmall = min(clusterMembers);
-
-          %assign all receptors in this cluster the displacement of that receptor
-          receptorDisp(clusterMembers,:) = repmat(receptorDisp(indxSmall,:),...
-              clusterSize(iCluster),1);
-
-      end
-      
-      
+           
       %% Association
       try     
           numClustPre = length(cluster2receptor(:,1));
