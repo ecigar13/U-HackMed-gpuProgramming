@@ -2,7 +2,7 @@ function [cluster2receptor,receptor2cluster,clusterSize] = receptorDissociationA
     cluster2receptor,receptor2cluster,clusterSize,dissociationProb)
 
   %get number of receptors and number of clusters
- 
+  
 
   %copy some input variables for modification and output
  

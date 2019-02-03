@@ -1,12 +1,5 @@
 function runReceptorAggregationSimple_HPC_PAR_20170519(runIndex,receptorDensity,...
     aggregationProb,dissRate)
-%  Probe runs with receptor density of 20. Will save label
-%  ratios 0.01 to 0.06.
-%
-%  28 April 2015
-%  19 May 2017 updated for paraRunner
-%
-
 
 rDdir=['rD', num2str(receptorDensity)];
 dRdir=[rDdir, '/dR', num2str(dissRate)];

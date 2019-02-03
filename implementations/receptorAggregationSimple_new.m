@@ -167,11 +167,15 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
     ##disassociate the pairs.
   %}
   
-  receptorOld = ones(numReceptors,4);
-  receptorNew = ones(numReceptors,4);
+  molArrayOld = ones(numReceptors,4);
+  molArrayNew = ones(numReceptors,4);
   %set cluster id to 0
-  receptorNew(:,1) = 0;
-  receptorOld(:,1)=0;
+  molArrayNew(:,1) = 0;
+  molArrayOld(:,1)=0;
+
+  %initialize the cluster-molecules map. Set UniformValues to false.  
+  clusterMolsMapNew = containers.Map(0,0,'UniformValues',false);
+  clusterMolsMapOld = containers.Map(0,0,'UniformValues',false);
 
 
   %iterate in time
@@ -179,17 +183,17 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
       fprintf('\niIter = %d\n',iIter);
       %%%%%%%%%%%%%%%%%%%%%%% Moving the receptors
       [molArrayNew,molArrayOld,clusterMolsMap] = move(molArrayNew, molArrayOld,clusterMolsMapOld,...
-          clusterMolsMapNew,stepStd,dissociationProb)
+          clusterMolsMapNew,stepStd,dissociationProb,observeSideLen);
       
       %% Dissociation
       %allow receptors in clusters to dissociate in current time point
       [cluster2receptor,receptor2clusterDissAlg,clusterSize] = receptorDissociationAlg(...
           cluster2receptor,receptor2cluster,clusterSize,dissociationProb);
       
+          %%Working on disassociation.
       aggregationProbVec = ones(numReceptors,1);
       
-           
-      %% Association
+      %% Association - not done.
       try     
           numClustPre = length(cluster2receptor(:,1));
           
