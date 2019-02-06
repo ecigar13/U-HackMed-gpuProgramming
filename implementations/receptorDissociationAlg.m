@@ -1,15 +1,19 @@
 function [cluster2receptor,receptor2cluster,clusterSize] = receptorDissociationAlg(...
-    cluster2receptor,receptor2cluster,clusterSize,dissociationProb)
+  molArrayNew,molArrayOld,clusterMolsMapOld, clusterMolsMapNew, dissociationProb)
 
-  %get number of receptors and number of clusters
+  %matlab doesn't allow chaining command.
+  clusterIds=keys(clusterMolsMapNew);
+  clusterMembers=values(clusterMolsMapNew);
+  clusterMolsMapOld=clusterMolsMapNew;
   
-
+  %if there's no cluster:
+  if(length(clusterIds)==1)  %there's only an initial key value pair.
+    return
+  end
+  
+  molArrayOld(:,[1:col]) = molArrayNew(:,[1:col]);
   %copy some input variables for modification and output
  
-
-  %find clusters with more than one receptor
-  clustersBig = find(clusterSize > 1);
-
   %06/27/13 (1 of 2)
   %{
   dissociationProb used on clusters instead of receptors (above).

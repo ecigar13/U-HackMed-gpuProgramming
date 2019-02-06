@@ -162,9 +162,6 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
     ##move them ---> will use a lot
     ##associate them ---> if they do so.
     ##dissociationProb = dissociationRate * timeStep;
-    ##rng(randNumGenSeeds(1),'twister')
-    ##move the pairs
-    ##disassociate the pairs.
   %}
   
   molArrayOld = ones(numReceptors,4);
@@ -182,13 +179,13 @@ function [receptorInfoAll,receptorInfoLabeled,timeIterArray,errFlag,assocStats,c
   for iIter = 2 : numIterations
       fprintf('\niIter = %d\n',iIter);
       %%%%%%%%%%%%%%%%%%%%%%% Moving the receptors
-      [molArrayNew,molArrayOld,clusterMolsMap] = move(molArrayNew, molArrayOld,clusterMolsMapOld,...
+      [molArrayNew,molArrayOld,clusterMolsMapOld, clusterMolsMapNew] = move(molArrayNew, molArrayOld,clusterMolsMapOld,...
           clusterMolsMapNew,stepStd,dissociationProb,observeSideLen);
       
       %% Dissociation
       %allow receptors in clusters to dissociate in current time point
-      [cluster2receptor,receptor2clusterDissAlg,clusterSize] = receptorDissociationAlg(...
-          cluster2receptor,receptor2cluster,clusterSize,dissociationProb);
+      [molArrayNew,molArrayOld,clusterMolsMapOld, clusterMolsMapNew] = receptorDissociationAlg(...
+        molArrayNew,molArrayOld,clusterMolsMapOld, clusterMolsMapNew, dissociationProb);
       
           %%Working on disassociation.
       aggregationProbVec = ones(numReceptors,1);
